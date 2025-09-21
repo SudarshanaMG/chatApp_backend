@@ -21,6 +21,7 @@ app.post('/register', async (req, res) => {
     await db.ref(`users/${user.uid}`).set({
       email,
       userName: userName || '',
+      uid: user.uid,
       createdAt: Date.now(),
     });
 

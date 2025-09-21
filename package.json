@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,6 +14,5 @@
     "firebase": "^12.3.0",
     "firebase-admin": "^13.5.0",
     "firebase-tools": "^14.17.0"
-  },
-  "type": "module"
+  }
 }

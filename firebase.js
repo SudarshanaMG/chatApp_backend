@@ -1,5 +1,8 @@
 import admin from 'firebase-admin';
-import serviceAccount from './serviceAccountKey.json' assert { type: 'json' };
+import fs from "fs/promises";
+
+const serviceAccountRaw = await fs.readFile("./serviceAccountKey.json", "utf-8");
+const serviceAccount = JSON.parse(serviceAccountRaw);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

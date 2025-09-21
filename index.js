@@ -30,9 +30,19 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.post('/login', (req, res) => {
-  res.status(400).json({ message: 'Login must be handled on the frontend using Firebase Client SDK.' });
+
+app.get('/users', async (req, res) => {
+  try {
+    const snapshot = await db.ref('users').once('value');
+    const users = snapshot.val();
+
+    res.status(200).json(Object.values(users || {}));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
 });
+
 
 app.post('/post', async (req, res) => {
   const { chatId, senderId, message } = req.body;

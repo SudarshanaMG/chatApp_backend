@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import { auth, db } from './firebase.js';
+import { v2 as cloudinary } from 'cloudinary';
+import multer from 'multer';
 
 const app = express();
 const port = 3000;

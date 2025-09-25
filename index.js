@@ -8,14 +8,51 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.post('/register', async (req, res) => {
-  const { email, password, userName, imageUri } = req.body;
+cloudinary.config({
+  cloud_name: 'cloudName',
+  api_key: 'apiKey',
+  api_secret: 'apiSecret',
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+const uploadImageToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: 'image',
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.secure_url);
+        }
+      }
+    );
+
+    stream.end(fileBuffer);
+  });
+};
+
+app.post('/register', upload.single('file'), async (req, res) => {
+  const { email, password, userName } = req.body;
+  const file = req.file;
+  let imageUri = '';
 
   try {
+    if (file) {
+      imageUri = await uploadImageToCloudinary(file.buffer);
+    }
     const user = await auth.createUser({
       email,
       password,
       userName: userName || '',
+      imageUri
     });
 
     await db.ref(`users/${user.uid}`).set({
@@ -28,6 +65,7 @@ app.post('/register', async (req, res) => {
 
     res.status(201).json({ message: 'User registered successfully', uid: user.uid });
   } catch (error) {
+    console.error('Error in /register:', error.message);
     res.status(400).json({ message: error.message });
   }
 });
@@ -76,5 +114,5 @@ app.post('/post', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on port: ${port}`);
 });

@@ -41,7 +41,7 @@ app.use(express.json());
 //   });
 // };
 
-app.post('/register', upload.single('file'), async (req, res) => {
+app.post('/register', async (req, res) => {
   const { email, password, userName, imageUri } = req.body;
   // const file = req.file;
   // let imageUri = '';

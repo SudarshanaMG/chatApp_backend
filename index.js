@@ -12,7 +12,7 @@ app.use(express.json());
 
 cloudinary.config({
   cloud_name: 'cloudName',
-  api_key: 'apiKey',
+  api_key: 'APIKEY',
   api_secret: 'apiSecret',
 });
 

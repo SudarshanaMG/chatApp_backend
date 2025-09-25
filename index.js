@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/register', async (req, res) => {
-  const { email, password, userName } = req.body;
+  const { email, password, userName, imageUri } = req.body;
 
   try {
     const user = await auth.createUser({
@@ -22,6 +22,7 @@ app.post('/register', async (req, res) => {
       email,
       userName: userName || '',
       uid: user.uid,
+      imageUri,
       createdAt: Date.now(),
     });
 
